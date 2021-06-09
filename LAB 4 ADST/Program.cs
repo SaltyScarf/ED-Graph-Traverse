@@ -19,6 +19,10 @@ namespace LAB_4_ADST
             };
             
             MyGraph graph = new MyGraph(ex);
+
+            Dijkstra alg = new Dijkstra(graph);
+            
+            alg.Traverse(0);
         }
     }
 }

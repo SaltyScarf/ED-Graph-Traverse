@@ -13,10 +13,10 @@ namespace LAB_4_ADST
 
         public void Traverse(int source)
         {
-            Algorithm(source);
+            PrintSolution(Algorithm(source));
         }
 
-        private void Algorithm(int src)
+        private int[] Algorithm(int src)
         {
             int[] dist = new int[_graph.VertexCount];
 
@@ -46,25 +46,28 @@ namespace LAB_4_ADST
                 }
 
             }
+
+            return dist;
         }
 
         private int MinDistance(int[] dist, bool[] sptSet)
         {
-            int min = int.MaxValue, min_index = -1;
+            int minValue = int.MaxValue;
+            int minIndex = -1;
 
             for (int v = 0; v < _graph.VertexCount; v++)
             {
-                if (sptSet[v] == false && dist[v] <= min)
+                if (sptSet[v] == false && dist[v] <= minValue)
                 {
-                    min = dist[v];
-                    min_index = v;
+                    minValue = dist[v];
+                    minIndex = v;
                 }
             }
 
-            return min_index;
+            return minIndex;
         }
 
-        private void PrintSolution(int[] dist, int n)
+        private void PrintSolution(int[] dist)
         {
             Console.Write("Vertex     ShortestPath "
                           + "from Source\n");
