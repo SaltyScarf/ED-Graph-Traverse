@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LAB_4_ADST
 {
@@ -13,51 +14,57 @@ namespace LAB_4_ADST
 
         public void Traverse(int source)
         {
-            PrintSolution(Algorithm(source), source);
+            int[] lastHop;
+            PrintSolution(Algorithm(source, out lastHop), source, lastHop);
         }
 
-        private int[] Algorithm(int src)
+        private int[] Algorithm(int src, out int[] lastHop)
         {
             int[] distances = new int[_graph.VertexCount];
 
-            bool[] sptSet = new bool[_graph.VertexCount];
+            bool[] included = new bool[_graph.VertexCount];
+
+            int[] tempHop = new int[_graph.VertexCount];
 
             for (int i = 0; i < _graph.VertexCount; i++)
             {
                 distances[i] = int.MaxValue;
-                sptSet[i] = false;
+                included[i] = false;
             }
 
             distances[src] = 0;
 
             for (int count = 0; count < _graph.VertexCount - 1; count++)
             {
-                int u = MinDistance(distances, sptSet);
+                int shortestDistInd = MinDistance(distances, included);
 
-                sptSet[u] = true;
+                included[shortestDistInd] = true;
 
                 for (int v = 0; v < _graph.VertexCount; v++)
                 {
-                    if (!sptSet[v] && _graph.Vertices[u].Adjacency[v] != 0
-                                   && distances[u] + _graph.Vertices[u].Adjacency[v] < distances[v])
+                    if (!included[v] && _graph.Vertices[shortestDistInd].Adjacency[v] != 0
+                                   && distances[shortestDistInd] + _graph.Vertices[shortestDistInd].Adjacency[v] < distances[v])
                     {
-                        distances[v] = distances[u] + _graph.Vertices[u].Adjacency[v];
+                        distances[v] = distances[shortestDistInd] + _graph.Vertices[shortestDistInd].Adjacency[v];
+                        tempHop[v] = shortestDistInd;
                     }
                 }
 
             }
 
+            lastHop = tempHop;
+
             return distances;
         }
 
-        private int MinDistance(int[] distances, bool[] sptSet)
+        private int MinDistance(int[] distances, bool[] included)
         {
             int minValue = int.MaxValue;
             int minIndex = -1;
 
             for (int v = 0; v < _graph.VertexCount; v++)
             {
-                if (sptSet[v] == false && distances[v] <= minValue)
+                if (included[v] == false && distances[v] <= minValue)
                 {
                     minValue = distances[v];
                     minIndex = v;
@@ -67,12 +74,45 @@ namespace LAB_4_ADST
             return minIndex;
         }
 
-        private void PrintSolution(int[] distances, int source)
+        private int GetSourceNextHop(List<int> path)
         {
-            Console.Write($"Vertex     ShortestPath from {0}\n", source);
+            return path[1];
+        }
+
+        private List<int> GetPathFromSource(int[] lastHop, int source, int destination)
+        {
+            List<int> path = new List<int>();
+
+            int currentVertex = destination;
+            
+            path.Add(currentVertex);
+
+            if (currentVertex == source)
+            {
+                path.Add(source);
+                return path;
+            }
+
+            while (currentVertex != source)
+            {
+                path.Add(lastHop[currentVertex]);
+                currentVertex = lastHop[currentVertex];
+            }
+
+            path.Reverse();
+
+            return path;
+        }
+
+        private void PrintSolution(int[] distances, int source, int[] lastHop)
+        {
+            Console.WriteLine("Source: " + source + "\n");
+            Console.Write($"Vertex     ShortestPath     Next Hop\n");
+            
             for (int i = 0; i < _graph.VertexCount; i++)
             {
-                Console.Write(i + " \t\t " + distances[i] + "\n");
+                int nextHope = GetSourceNextHop(GetPathFromSource(lastHop, source, i));
+                Console.Write(i + " \t\t " + distances[i] + " \t\t " + nextHope + "\n");
             }
         }
     }
