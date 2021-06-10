@@ -1,6 +1,8 @@
-﻿namespace LAB_4_ADST
+using System;
+
+namespace LAB_4_ADST
 {
-    public class Kruskal
+    public class Kruskal<T>
     {
         
     }

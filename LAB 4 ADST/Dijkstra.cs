@@ -2,64 +2,64 @@
 
 namespace LAB_4_ADST
 {
-    public class Dijkstra
+    public class Dijkstra<T>
     {
-        private MyGraph _graph;
+        private MyGraph<T> _graph;
 
-        public Dijkstra(MyGraph graph)
+        public Dijkstra(MyGraph<T> graph)
         {
             _graph = graph;
         }
 
         public void Traverse(int source)
         {
-            PrintSolution(Algorithm(source));
+            PrintSolution(Algorithm(source), source);
         }
 
         private int[] Algorithm(int src)
         {
-            int[] dist = new int[_graph.VertexCount];
+            int[] distances = new int[_graph.VertexCount];
 
             bool[] sptSet = new bool[_graph.VertexCount];
 
             for (int i = 0; i < _graph.VertexCount; i++)
             {
-                dist[i] = int.MaxValue;
+                distances[i] = int.MaxValue;
                 sptSet[i] = false;
             }
 
-            dist[src] = 0;
+            distances[src] = 0;
 
             for (int count = 0; count < _graph.VertexCount - 1; count++)
             {
-                int u = MinDistance(dist, sptSet);
+                int u = MinDistance(distances, sptSet);
 
                 sptSet[u] = true;
 
                 for (int v = 0; v < _graph.VertexCount; v++)
                 {
-                    if (!sptSet[v] && _graph.Matrix[u, v] != 0
-                                   && dist[u] != int.MaxValue && dist[u] + _graph.Matrix[u, v] < dist[v])
+                    if (!sptSet[v] && _graph.Vertices[u].Adjacency[v] != 0
+                                   && distances[u] + _graph.Vertices[u].Adjacency[v] < distances[v])
                     {
-                        dist[v] = dist[u] + _graph.Matrix[u, v];
+                        distances[v] = distances[u] + _graph.Vertices[u].Adjacency[v];
                     }
                 }
 
             }
 
-            return dist;
+            return distances;
         }
 
-        private int MinDistance(int[] dist, bool[] sptSet)
+        private int MinDistance(int[] distances, bool[] sptSet)
         {
             int minValue = int.MaxValue;
             int minIndex = -1;
 
             for (int v = 0; v < _graph.VertexCount; v++)
             {
-                if (sptSet[v] == false && dist[v] <= minValue)
+                if (sptSet[v] == false && distances[v] <= minValue)
                 {
-                    minValue = dist[v];
+                    minValue = distances[v];
                     minIndex = v;
                 }
             }
@@ -67,13 +67,12 @@ namespace LAB_4_ADST
             return minIndex;
         }
 
-        private void PrintSolution(int[] dist)
+        private void PrintSolution(int[] distances, int source)
         {
-            Console.Write("Vertex     ShortestPath "
-                          + "from Source\n");
+            Console.Write($"Vertex     ShortestPath from {0}\n", source);
             for (int i = 0; i < _graph.VertexCount; i++)
             {
-                Console.Write(i + " \t\t " + dist[i] + "\n");
+                Console.Write(i + " \t\t " + distances[i] + "\n");
             }
         }
     }
