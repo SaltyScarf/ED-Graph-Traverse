@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Kruskal.cs" />
+      <Compile Remove="MyEdge.cs" />
     </ItemGroup>
 
 </Project>

@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace LAB_4_ADST
 {
-    public class MyGraph
+    public class MyGraph<T>
     {
-        public int[,] Matrix;
+        public Vertex<T>[] Vertices;
         private int _vertexCount;
 
         public int VertexCount
@@ -13,16 +13,22 @@ namespace LAB_4_ADST
             get => _vertexCount;
         }
 
-        public MyGraph(int vertexCount)
+        public MyGraph(int[,] matrix, T[] values)
         {
-            Matrix = new int[vertexCount, vertexCount];
-            _vertexCount = vertexCount;
-        }
+            _vertexCount = values.GetLength(0);
+            Vertices = new Vertex<T>[_vertexCount];
+            
+            for (int i = 0; i < VertexCount; i++)
+            {
+                int[] row = new int[VertexCount];
+                
+                for (int j = 0; j < VertexCount; j++)
+                {
+                    row[j] = matrix[i, j];
+                }
 
-        public MyGraph(int[,] matrix)
-        {
-            Matrix = matrix;
-            _vertexCount = matrix.GetLength(0);
+                Vertices[i] = new Vertex<T>(values[i], row);
+            }
         }
 
         public void PrintMatrix()
@@ -31,7 +37,7 @@ namespace LAB_4_ADST
             {
                 for (int j = 0; j < VertexCount; j++)
                 {
-                     Console.Write(Matrix[i,j] + " ");
+                     Console.Write(Vertices[i].Adjacency[j] + " ");
                 }
                 
                 Console.WriteLine();

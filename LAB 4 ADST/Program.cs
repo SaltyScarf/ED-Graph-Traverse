@@ -17,12 +17,27 @@ namespace LAB_4_ADST
                 { 0, 0, 0, 3, 1, 2, 0, 6 },
                 { 0, 0, 0, 0, 0, 3, 6, 0 },
             };
-            
-            MyGraph graph = new MyGraph(ex);
 
-            Dijkstra alg = new Dijkstra(graph);
+            int[] values = new int[]
+            {
+                100,
+                200,
+                300,
+                400,
+                500,
+                600,
+                700,
+                800,
+            };
+            
+            MyGraph<int> graph = new MyGraph<int>(ex, values);
+
+            Dijkstra<int> alg = new Dijkstra<int>(graph);
             
             alg.Traverse(0);
+
+            Kruskal<int> alg1 = new Kruskal<int>(graph);
+            alg1.FindMST();
         }
     }
 }
