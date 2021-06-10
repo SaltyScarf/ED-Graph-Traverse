@@ -36,8 +36,8 @@ namespace LAB_4_ADST
             
             alg.Traverse(0);
 
-            //Kruskal<int> alg1 = new Kruskal<int>(graph);
-            //alg1.FindMST();
+            Kruskal<int> alg1 = new Kruskal<int>(graph);
+            alg1.FindMST();
         }
     }
 }
